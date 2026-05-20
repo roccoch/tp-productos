@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>productos-app</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <form id="product-form">
+        <input type="text" id="product-name" placeholder="Nombre del producto" required />
+        <input type="number" id="product-price" placeholder="Precio" required />
+        <input type="number" id="product-stock" placeholder="Stock" required />
+        <select id="product-category" required>
+          <option value="">Selecciona una categoría</option>
+
+        </select>
+        <input type="hidden" id="editing-id" value="">
+        <button type="submit" id="btn-product">Agregar Producto</button>        
+      </form>
+<table>
+  <thead>
+    <tr>
+      <th>Producto</th>
+      <th>Precio</th>
+      <th>Stock</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody id="productos">
+    <!-- Product rows will be inserted here by JavaScript -->
+  </tbody>
+</table>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
