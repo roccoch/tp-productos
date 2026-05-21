@@ -1,0 +1,305 @@
+/* ══════════════════════════════════════
+   VARIABLES GLOBALES (Custom Properties)
+   Cambiando estos valores se actualiza
+   todo el diseño desde un solo lugar.
+   ══════════════════════════════════════ */
+:root {
+  --color-fondo:        #0f0f1a;
+  --color-tarjeta:      #1c1c2e;
+  --color-borde:        #2e2e4a;
+  --color-acento:       #7c6af7;
+  --color-acento-claro: #a594ff;
+  --color-texto:        #e8e8f0;
+  --color-texto-suave:  #888899;
+  --color-exito:        #4caf82;
+  --color-alerta:       #f7a84a;
+  --color-peligro:      #f76a6a;
+  --radio:              12px;
+  --sombra:             0 4px 24px rgba(0,0,0,0.4);
+  --transicion:         0.2s ease;
+}
+
+/* ══════════════════════════════════════
+   RESET BÁSICO
+   Elimina márgenes y paddings por defecto
+   del navegador para partir de cero.
+   ══════════════════════════════════════ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--color-fondo);
+  color: var(--color-texto);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 40px 16px;
+}
+
+/* ══════════════════════════════════════
+   CONTENEDOR PRINCIPAL
+   ══════════════════════════════════════ */
+.app {
+  background-color: var(--color-tarjeta);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+  width: 100%;
+  max-width: 860px;
+  padding: 32px 28px;
+  height: fit-content;
+}
+
+/* ══════════════════════════════════════
+   HEADER
+   ══════════════════════════════════════ */
+.app__header {
+  margin-bottom: 28px;
+  text-align: center;
+}
+
+.app__title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-acento-claro);
+}
+
+.app__subtitle {
+  color: var(--color-texto-suave);
+  font-size: 0.9rem;
+  margin-top: 4px;
+}
+
+/* ══════════════════════════════════════
+   FORMULARIO
+   display:flex alinea los inputs en fila.
+   flex-wrap:wrap permite que bajen de línea
+   en pantallas pequeñas.
+   ══════════════════════════════════════ */
+.form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.form__input {
+  flex: 1;
+  min-width: 140px;
+  padding: 11px 14px;
+  background: var(--color-fondo);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio);
+  color: var(--color-texto);
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color var(--transicion);
+}
+
+/* Input más corto para precio y stock */
+.form__input--corto {
+  flex: 0 0 110px;
+  min-width: 90px;
+}
+
+.form__input:focus {
+  border-color: var(--color-acento);
+}
+
+.form__input::placeholder {
+  color: var(--color-texto-suave);
+}
+
+/* Quita las flechitas de los input number */
+.form__input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
+.form__btn {
+  padding: 11px 22px;
+  background: var(--color-acento);
+  color: #fff;
+  border: none;
+  border-radius: var(--radio);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--transicion), transform var(--transicion);
+  white-space: nowrap;
+}
+
+.form__btn:hover  { background: var(--color-acento-claro); transform: translateY(-1px); }
+.form__btn:active { transform: translateY(0); }
+
+/* ══════════════════════════════════════
+   BARRA DE BÚSQUEDA Y ORDEN
+   ══════════════════════════════════════ */
+.busqueda {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.busqueda__input {
+  flex: 1;
+  min-width: 180px;
+  padding: 9px 14px;
+  background: var(--color-fondo);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio);
+  color: var(--color-texto);
+  font-size: 0.88rem;
+  outline: none;
+  transition: border-color var(--transicion);
+}
+
+.busqueda__input:focus { border-color: var(--color-acento); }
+.busqueda__input::placeholder { color: var(--color-texto-suave); }
+
+.busqueda__select {
+  padding: 9px 12px;
+  background: var(--color-fondo);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio);
+  color: var(--color-texto);
+  font-size: 0.88rem;
+  cursor: pointer;
+  outline: none;
+}
+
+/* ══════════════════════════════════════
+   TABLA DE PRODUCTOS
+   ══════════════════════════════════════ */
+
+/* wrapper con scroll horizontal en móvil */
+.tabla-wrapper {
+  overflow-x: auto;
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio);
+  margin-bottom: 20px;
+}
+
+.tabla {
+  width: 100%;
+  border-collapse: collapse; /* elimina espacio doble entre bordes */
+  font-size: 0.9rem;
+}
+
+/* Encabezados */
+.tabla thead tr {
+  background: rgba(124, 106, 247, 0.12);
+}
+
+.tabla th {
+  padding: 12px 16px;
+  text-align: left;
+  color: var(--color-acento-claro);
+  font-weight: 600;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+/* Filas de datos */
+.tabla td {
+  padding: 12px 16px;
+  border-top: 1px solid var(--color-borde);
+  vertical-align: middle;
+}
+
+/* Fila alterna para mejor lectura */
+.tabla tbody tr:nth-child(even) {
+  background: rgba(255,255,255,0.02);
+}
+
+.tabla tbody tr {
+  transition: background var(--transicion);
+  animation: aparecer 0.2s ease;
+}
+
+.tabla tbody tr:hover {
+  background: rgba(124, 106, 247, 0.07);
+}
+
+/* Animación de entrada de filas */
+@keyframes aparecer {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Badges de estado ── */
+.badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.badge--ok      { background: rgba(76,175,130,0.15); color: var(--color-exito); }
+.badge--bajo    { background: rgba(247,168,74,0.15);  color: var(--color-alerta); }
+.badge--agotado { background: rgba(247,106,106,0.15); color: var(--color-peligro); }
+
+/* ── Botones de acción en la tabla ── */
+.btn-accion {
+  background: transparent;
+  border: 1px solid var(--color-borde);
+  border-radius: 7px;
+  color: var(--color-texto-suave);
+  padding: 5px 10px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all var(--transicion);
+}
+
+.btn-accion:hover               { border-color: var(--color-acento); color: var(--color-acento-claro); }
+.btn-accion.btn-accion--eliminar:hover { border-color: var(--color-peligro); color: var(--color-peligro); }
+
+/* Fila de "sin resultados" */
+.tabla__vacia td {
+  text-align: center;
+  color: var(--color-texto-suave);
+  padding: 32px;
+}
+
+/* ══════════════════════════════════════
+   FOOTER
+   ══════════════════════════════════════ */
+.app__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-borde);
+  font-size: 0.85rem;
+  color: var(--color-texto-suave);
+}
+
+#valor-total {
+  color: var(--color-acento-claro);
+  font-weight: 600;
+}
+
+.btn-limpiar {
+  background: transparent;
+  border: 1px solid var(--color-borde);
+  border-radius: 8px;
+  color: var(--color-texto-suave);
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all var(--transicion);
+}
+
+.btn-limpiar:hover {
+  border-color: var(--color-peligro);
+  color: var(--color-peligro);
+}

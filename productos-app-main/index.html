@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gestión de Productos</title>
+<link rel="stylesheet" href="style.css" /><body>
+  <div class="app">
+    <header class="app__header">
+      <h1 class="app__title">📦 Productos</h1>
+      <p class="app__subtitle">Administrá tu inventario</p>
+    </header>
+ 
+    <div class="form">
+      <input type="text" id="input-nombre" class="form__input" placeholder="Nombre del producto..." maxlength="60" />
+      <input type="number" id="input-precio" class="form__input form__input--corto" placeholder="Precio $" min="0" />
+      <input type="number" id="input-stock" class="form__input form__input--corto" placeholder="Stock" min="0" />
+      
+      <select id="select-categoria" class="form__input form__input--corto" style="padding: 8px; font-size: 16px;">
+        <option value="">Selecciona una categoría</option>
+      </select>
+
+      <input type="hidden" id="editing-id" value="">
+
+      <button id="btn-agregar" class="form__btn">Agregar</button>
+    </div>
+ 
+    <div class="busqueda">
+      <input type="text" id="input-busqueda" class="busqueda__input" placeholder="🔍  Buscar producto..." />
+      <select id="select-orden" class="busqueda__select">
+        <option value="reciente">Más reciente</option>
+        <option value="nombre">Nombre A-Z</option>
+        <option value="precio-asc">Precio ↑</option>
+        <option value="precio-desc">Precio ↓</option>
+        <option value="stock">Stock</option>
+      </select>
+    </div>
+ 
+    <div class="tabla-wrapper">
+      <table class="tabla" id="tabla-productos">
+        <thead>
+          <tr>
+            <th>Producto</th>
+            <th>Precio</th>
+            <th>Stock</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="tbody-productos">
+          </tbody>
+      </table>
+    </div>
+ 
+    <footer class="app__footer">
+      <span id="contador-productos">0 productos</span>
+      <span id="valor-total">Total: $0</span>
+      <button id="btn-limpiar" class="btn-limpiar">Eliminar sin stock</button>
+    </footer>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
