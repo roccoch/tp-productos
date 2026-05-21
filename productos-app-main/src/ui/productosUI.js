@@ -1,30 +1,40 @@
-// Funciones para manipular el DOM y la interfaz de usuario
-
 import { getProductoById, updateProducto, deleteProducto, postProducto } from '../api/productosApi.js'
 import { validarFormulario } from '../utils/validaciones.js'
 
 let productos = []
 
-// Referencias a elementos del DOM
-const tablaProductos = document.getElementById('productos')
-const btnProduct = document.getElementById('btn-product')
+// Nuevas referencias al DOM basadas en el HTML de tus compañeros
+const tablaProductos = document.getElementById('tbody-productos')
+const btnProduct = document.getElementById('btn-agregar')
 const editingIdInput = document.getElementById('editing-id')
-const productForm = document.getElementById('product-form')
+const categorySelect = document.getElementById('select-categoria')
+
+const inputNombre = document.getElementById('input-nombre')
+const inputPrecio = document.getElementById('input-precio')
+const inputStock = document.getElementById('input-stock')
+
+// Elementos para las métricas que agregaron tus compañeros
+const contadorProductos = document.getElementById('contador-productos')
+const valorTotal = document.getElementById('valor-total')
 
 export function setProductos(data) {
   productos = data
 }
 
+// Renderizar la tabla y de paso calcular las métricas que pide el footer nuevo
 export function renderProductos() {
   tablaProductos.innerHTML = ''
+  let totalDinero = 0
 
   productos.forEach(producto => {
+    totalDinero += producto.price * producto.quantity
+
     const productoCard = document.createElement('tr')
     productoCard.className = 'producto-card'
     productoCard.innerHTML = `
       <td>${producto.name}</td>  
-      <td>${producto.price}</td>
-      <td>${producto.quantity}</td>
+      <td>$${producto.price}</td>
+      <td>${producto.quantity} u.</td>
       <td>
         <button class="edit-btn" data-id="${producto.id}" data-action="edit">Editar</button>
         <button class="delete-btn" data-id="${producto.id}" data-action="delete">Eliminar</button>
@@ -32,10 +42,15 @@ export function renderProductos() {
     `
     tablaProductos.appendChild(productoCard)
   })
+
+  // Actualizar los textos del footer dinámicamente
+  if (contadorProductos) contadorProductos.textContent = `${productos.length} productos`;
+  if (valorTotal) valorTotal.textContent = `Total: $${totalDinero.toLocaleString()}`;
 }
 
 export function llenarCategorias(categorias) {
-  const categorySelect = document.getElementById('product-category')
+  if (!categorySelect) return
+  categorySelect.innerHTML = '<option value="">Selecciona una categoría</option>'
   categorias.forEach(category => {
     const option = document.createElement('option')
     option.value = category.id
@@ -44,21 +59,21 @@ export function llenarCategorias(categorias) {
   })
 }
 
+// Manejador del click modificado (ya no es un submit de formulario)
 export async function handleFormSubmit(event) {
-  event.preventDefault()
-  
-  const name = document.getElementById('product-name').value
-  const price = parseFloat(document.getElementById('product-price').value)
-  const quantity = parseInt(document.getElementById('product-stock').value)
-  const category = parseInt(document.getElementById('product-category').value)
+  // Capturamos los valores de los nuevos IDs
+  const name = inputNombre.value
+  const price = parseFloat(inputPrecio.value)
+  const quantity = parseInt(inputStock.value)
+  const category = parseInt(categorySelect.value)
   const editingId = editingIdInput ? editingIdInput.value : ''
 
-  if (!validarFormulario(name, price, quantity)) {
-    alert('Por favor, complete todos los campos correctamente.')
+  if (!validarFormulario(name, price, quantity) || !category) {
+    alert('Por favor, complete todos los campos correctamente, incluyendo la categoría.')
     return
   }
 
-  const newProducto = { 
+  const datosProducto = { 
     name: name, 
     price: price, 
     quantity: quantity,
@@ -66,23 +81,31 @@ export async function handleFormSubmit(event) {
   }
 
   if (editingId) {
-    await updateProducto(parseInt(editingId), newProducto)
-    resetFormulario()
-  } else {
-    const productoAgregado = await postProducto(newProducto)
-    if (productoAgregado) {
-      productos.push(productoAgregado)
+    const exito = await updateProducto(parseInt(editingId), datosProducto)
+    if (exito) {
+      // Actualizar el array localmente para no tener que recargar la página
+      productos = productos.map(p => p.id === parseInt(editingId) ? { ...p, ...datosProducto } : p)
+      resetFormulario()
     }
-    resetFormulario()
+  } else {
+    const productoAgregado = await postProducto(datosProducto)
+    if (productoAgregado) {
+      // Agregamos el producto retornado (que ya trae la estructura de la DB)
+      productos.push(productoAgregado)
+      resetFormulario()
+    }
   }
   
   renderProductos()
 }
 
 function resetFormulario() {
-  productForm.reset()
+  inputNombre.value = ''
+  inputPrecio.value = ''
+  inputStock.value = ''
+  categorySelect.value = ''
   if (editingIdInput) editingIdInput.value = ''
-  if (btnProduct) btnProduct.textContent = 'Agregar Producto'
+  if (btnProduct) btnProduct.textContent = 'Agregar'
 }
 
 export async function handleTablaClick(event) {
@@ -106,18 +129,17 @@ export async function handleTablaClick(event) {
 export async function prepararEditarProducto(id) {
   const producto = await getProductoById(id)
   if (producto) {
-    document.getElementById('product-name').value = producto.name
-    document.getElementById('product-price').value = producto.price
-    document.getElementById('product-stock').value = producto.quantity
-    document.getElementById('product-category').value = producto.categoryId
+    inputNombre.value = producto.name
+    inputPrecio.value = producto.price
+    inputStock.value = producto.quantity
+    categorySelect.value = producto.categoryId
     if (editingIdInput) editingIdInput.value = id
     if (btnProduct) btnProduct.textContent = 'Guardar cambios'
   }
   return producto
 }
 
-// Inicializar listeners
 export function inicializarListeners() {
-  productForm.addEventListener('submit', handleFormSubmit)
-  tablaProductos.addEventListener('click', handleTablaClick)
+  if (btnProduct) btnProduct.addEventListener('click', handleFormSubmit)
+  if (tablaProductos) tablaProductos.addEventListener('click', handleTablaClick)
 }
