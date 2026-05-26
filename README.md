@@ -1,7 +1,7 @@
-**Romano Maximo**
-**Cabrera Sebastian**
-**Ruiz Benjamin**
-**Andina Juan**
+**Romano Maximo** -
+**Cabrera Sebastian** -
+**Ruiz Benjamin** -
+**Andina Juan** -  
 **Chirieleison Rocco**
 # [Productos CRUD]
 
